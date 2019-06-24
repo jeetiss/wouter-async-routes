@@ -44,6 +44,7 @@ const Link = ({ to, ...props }) => {
     if (paths.has(to)) {
       let fetcher = paths.get(to);
 
+      // hack for run lazy promise
       fetcher().then(v => v);
     }
   }, [paths, to]);
