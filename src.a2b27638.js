@@ -26152,11 +26152,11 @@ var LazySwitch = function LazySwitch(_ref2) {
   (0, _react.useEffect)(function () {
     var kids = children && children.length ? children : [children];
     kids.forEach(function (kid) {
-      return kids.factory && paths.set(kid.path, kids.factory);
+      return kid.props.factory && paths.set(kid.props.path, kid.props.factory);
     });
     return function () {
       return kids.forEach(function (kid) {
-        return kids.factory && paths.delete(kid.path);
+        return kid.props.factory && paths.delete(kid.props.path);
       });
     };
   }, [children, paths]);
@@ -26670,7 +26670,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52717" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53386" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
