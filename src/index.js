@@ -3,7 +3,11 @@ import ReactDOM from 'react-dom'
 
 import { Route, Router } from 'wouter'
 import useLocation from 'wouter/use-location'
-import { LazyRoute, LinkWithPrefetch as Link } from './lazy-wouter'
+import {
+  LazyRoute,
+  LazySwitch as Switch,
+  LinkWithPrefetch as Link
+} from './lazy-wouter'
 
 import './styles.css'
 
@@ -34,20 +38,36 @@ function App () {
           <Link to='/jquery'>jquery</Link>
           <Link to='/lodash'>lodash</Link>
           <Link to='/antd'>antd</Link>
+          <Link to='/another/path'>another</Link>
         </nav>
 
         <main>
           <center>
             <Suspense fallback='loading...'>
-              <LazyRoute path='/jquery' factory={() => import('./pages/jquery')} />
-              <LazyRoute path='/lodash' factory={() => import('./pages/lodash')} />
-              <LazyRoute path='/antd' factory={() => import('./pages/antd')} />
+              <Switch>
+                <Route path='/'>
+                  <h1>Code splitting example</h1>
 
-              <Route path='/'>
-                <h1>Code splitting example</h1>
+                  <p>wouter + suspense = ❤️</p>
+                </Route>
 
-                <p>wouter + suspense = ❤️</p>
-              </Route>
+                <LazyRoute
+                  path='/jquery'
+                  factory={() => import('./pages/jquery')}
+                />
+                <LazyRoute
+                  path='/lodash'
+                  factory={() => import('./pages/lodash')}
+                />
+                <LazyRoute
+                  path='/antd'
+                  factory={() => import('./pages/antd')}
+                />
+                <LazyRoute
+                  path='/:rest*'
+                  factory={() => import('./pages/404')}
+                />
+              </Switch>
             </Suspense>
           </center>
         </main>

@@ -7,7 +7,7 @@ import React, {
   useContext
 } from 'react'
 
-import { Link as WLink, useRoute } from 'wouter'
+import { Link as WLink, Switch, useRoute } from 'wouter'
 
 const PathsContext = createContext(new Map())
 const usePaths = () => useContext(PathsContext)
@@ -26,6 +26,20 @@ const LazyRoute = ({ path, factory }) => {
   return matches && <Component params={params} />
 }
 
+const LazySwitch = ({ children, location }) => {
+  const paths = usePaths()
+
+  useEffect(() => {
+    let kids = children && children.length ? children : [children]
+
+    kids.forEach(kid => kids.factory && paths.set(kid.path, kids.factory))
+
+    return () => kids.forEach(kid => kids.factory && paths.delete(kid.path))
+  }, [children, paths])
+
+  return <Switch children={children} location={location} />
+}
+
 const LinkWithPrefetch = ({ to, ...props }) => {
   const paths = usePaths()
   const prefetch = useCallback(() => {
@@ -40,4 +54,4 @@ const LinkWithPrefetch = ({ to, ...props }) => {
   return <WLink to={to} {...props} onMouseEnter={prefetch} />
 }
 
-export { LinkWithPrefetch, LazyRoute }
+export { LinkWithPrefetch, LazyRoute, LazySwitch }
