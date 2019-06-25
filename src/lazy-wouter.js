@@ -32,9 +32,9 @@ const LazySwitch = ({ children, location }) => {
   useEffect(() => {
     let kids = children && children.length ? children : [children]
 
-    kids.forEach(kid => kids.factory && paths.set(kid.path, kids.factory))
+    kids.forEach(kid => kid.props.factory && paths.set(kid.props.path, kid.props.factory))
 
-    return () => kids.forEach(kid => kids.factory && paths.delete(kid.path))
+    return () => kids.forEach(kid => kid.props.factory && paths.delete(kid.props.path))
   }, [children, paths])
 
   return <Switch children={children} location={location} />
