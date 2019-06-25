@@ -8,17 +8,14 @@ import React, {
   useContext
 } from "react";
 
-import { Router as WRouter, Link as WLink, useRoute } from "wouter";
+import { Link as WLink, useRoute } from "wouter";
 
 const PathsContext = createContext(new Map());
 const usePaths = () => useContext(PathsContext);
 
-const Router = ({ children, fallback }) => {
-  return (
-    <Suspense fallback={fallback}>
-      <WRouter>{children}</WRouter>
-    </Suspense>
-  );
+// TODO: not an actual switch!
+const LazySwitch = ({ children, fallback }) => {
+  return <Suspense fallback={fallback}>{children}</Suspense>;
 };
 
 const Route = ({ path, factory }) => {
@@ -31,7 +28,6 @@ const Route = ({ path, factory }) => {
 
     return () => paths.delete(path);
   }, [paths, path, factory]);
-  
 
   return matches && <Component />;
 };
@@ -39,7 +35,7 @@ const Route = ({ path, factory }) => {
 const Link = ({ to, ...props }) => {
   const paths = usePaths();
   const prefetch = useCallback(() => {
-    console.log('try prefetch route: ', to)
+    console.log("try prefetch route: ", to);
 
     if (paths.has(to)) {
       let fetcher = paths.get(to);
@@ -52,4 +48,4 @@ const Link = ({ to, ...props }) => {
   return <WLink to={to} {...props} onMouseEnter={prefetch} />;
 };
 
-export { Link, Route, Router };
+export { Link, Route, LazySwitch };
