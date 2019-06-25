@@ -32,11 +32,5 @@
     "build": "parcel build index.html",
     "predeploy": "parcel build index.html --public-url /wouter-async-routes",
     "deploy": "gh-pages -d dist"
-  },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ]
+  }
 }
