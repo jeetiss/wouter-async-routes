@@ -1,0 +1,1 @@
+{"version":3,"sources":["src/pages/404.js"],"names":["params","rest"],"mappings":";;;;;;;AAAA;;;;eAEe;AAAA,MAAGA,MAAH,QAAGA,MAAH;AAAA,SAAgB,0CAAMA,MAAM,CAACC,IAAb,eAAhB;AAAA","file":"404.c36e214f.js","sourceRoot":"..","sourcesContent":["import React from 'react'\n\nexport default ({ params }) => <div>{params.rest} not found</div>\n"]}
