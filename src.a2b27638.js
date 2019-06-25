@@ -26091,7 +26091,7 @@ exports.default = _default;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.LazySwitch = exports.Route = exports.Link = void 0;
+exports.LazyRoute = exports.LinkWithPrefetch = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
@@ -26117,27 +26117,17 @@ var PathsContext = (0, _react.createContext)(new Map());
 
 var usePaths = function usePaths() {
   return (0, _react.useContext)(PathsContext);
-}; // TODO: not an actual switch!
-
-
-var LazySwitch = function LazySwitch(_ref) {
-  var children = _ref.children,
-      fallback = _ref.fallback;
-  return _react.default.createElement(_react.Suspense, {
-    fallback: fallback
-  }, children);
 };
 
-exports.LazySwitch = LazySwitch;
-
-var Route = function Route(_ref2) {
-  var path = _ref2.path,
-      factory = _ref2.factory;
+var LazyRoute = function LazyRoute(_ref) {
+  var path = _ref.path,
+      factory = _ref.factory;
   var paths = usePaths();
 
   var _useRoute = (0, _wouter.useRoute)(path),
-      _useRoute2 = _slicedToArray(_useRoute, 1),
-      matches = _useRoute2[0];
+      _useRoute2 = _slicedToArray(_useRoute, 2),
+      matches = _useRoute2[0],
+      params = _useRoute2[1];
 
   var Component = (0, _react.useMemo)(function () {
     return (0, _react.lazy)(factory);
@@ -26148,19 +26138,19 @@ var Route = function Route(_ref2) {
       return paths.delete(path);
     };
   }, [paths, path, factory]);
-  return matches && _react.default.createElement(Component, null);
+  return matches && _react.default.createElement(Component, {
+    params: params
+  });
 };
 
-exports.Route = Route;
+exports.LazyRoute = LazyRoute;
 
-var Link = function Link(_ref3) {
-  var to = _ref3.to,
-      props = _objectWithoutProperties(_ref3, ["to"]);
+var LinkWithPrefetch = function LinkWithPrefetch(_ref2) {
+  var to = _ref2.to,
+      props = _objectWithoutProperties(_ref2, ["to"]);
 
   var paths = usePaths();
   var prefetch = (0, _react.useCallback)(function () {
-    console.log("try prefetch route: ", to);
-
     if (paths.has(to)) {
       var fetcher = paths.get(to); // hack for run lazy promise
 
@@ -26176,7 +26166,7 @@ var Link = function Link(_ref3) {
   }));
 };
 
-exports.Link = Link;
+exports.LinkWithPrefetch = LinkWithPrefetch;
 },{"react":"node_modules/react/index.js","wouter":"node_modules/wouter/index.js"}],"node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
 var bundleURL = null;
 
@@ -26359,7 +26349,7 @@ function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = 
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-var isProd = "development" === "production";
+var isProd = "development" === 'production';
 
 var makeUseBasepathLocation = function makeUseBasepathLocation(basepath) {
   return function () {
@@ -26372,43 +26362,45 @@ var makeUseBasepathLocation = function makeUseBasepathLocation(basepath) {
     var normalized = location.startsWith(basepath) ? location.slice(basepath.length) : location;
     var setter = (0, _react.useCallback)(function (to) {
       return setLocation(basepath + to);
-    }, [basepath, setLocation]);
+    }, [setLocation]);
     return [normalized, setter];
   };
 };
 
-var useBasepathLocation = makeUseBasepathLocation(isProd ? "/wouter-async-routes" : "");
+var useBasepathLocation = makeUseBasepathLocation(isProd ? '/wouter-async-routes' : '');
 
 function App() {
   return _react.default.createElement(_wouter.Router, {
     hook: useBasepathLocation
-  }, _react.default.createElement("section", null, _react.default.createElement("nav", null, _react.default.createElement(_lazyWouter.Link, {
+  }, _react.default.createElement("section", null, _react.default.createElement("nav", null, _react.default.createElement(_lazyWouter.LinkWithPrefetch, {
     to: "/jquery"
-  }, "jquery"), _react.default.createElement(_lazyWouter.Link, {
+  }, "jquery"), _react.default.createElement(_lazyWouter.LinkWithPrefetch, {
     to: "/lodash"
-  }, "lodash"), _react.default.createElement(_lazyWouter.Link, {
+  }, "lodash"), _react.default.createElement(_lazyWouter.LinkWithPrefetch, {
     to: "/antd"
-  }, "antd")), _react.default.createElement("main", null, _react.default.createElement("center", null, _react.default.createElement(_lazyWouter.LazySwitch, {
+  }, "antd")), _react.default.createElement("main", null, _react.default.createElement("center", null, _react.default.createElement(_react.Suspense, {
     fallback: "loading..."
-  }, _react.default.createElement(_lazyWouter.Route, {
+  }, _react.default.createElement(_lazyWouter.LazyRoute, {
     path: "/jquery",
     factory: function factory() {
-      return require("_bundle_loader")(require.resolve("./pages/jquery"));
+      return require("_bundle_loader")(require.resolve('./pages/jquery'));
     }
-  }), _react.default.createElement(_lazyWouter.Route, {
+  }), _react.default.createElement(_lazyWouter.LazyRoute, {
     path: "/lodash",
     factory: function factory() {
-      return require("_bundle_loader")(require.resolve("./pages/lodash"));
+      return require("_bundle_loader")(require.resolve('./pages/lodash'));
     }
-  }), _react.default.createElement(_lazyWouter.Route, {
+  }), _react.default.createElement(_lazyWouter.LazyRoute, {
     path: "/antd",
     factory: function factory() {
-      return require("_bundle_loader")(require.resolve("./pages/antd"));
+      return require("_bundle_loader")(require.resolve('./pages/antd'));
     }
-  }))))));
+  }), _react.default.createElement(_wouter.Route, {
+    path: "/"
+  }, _react.default.createElement("h1", null, "Code splitting example"), _react.default.createElement("p", null, "wouter + suspense = \u2764\uFE0F")))))));
 }
 
-var rootElement = document.getElementById("root");
+var rootElement = document.getElementById('root');
 
 _reactDom.default.render(_react.default.createElement(App, null), rootElement);
 },{"react":"node_modules/react/index.js","react-dom":"node_modules/react-dom/index.js","wouter":"node_modules/wouter/index.js","wouter/use-location":"node_modules/wouter/use-location.js","./lazy-wouter":"src/lazy-wouter.js","./styles.css":"src/styles.css","_bundle_loader":"node_modules/parcel-bundler/src/builtins/bundle-loader.js","./pages/jquery":[["jquery.e6729f4f.js","src/pages/jquery.js"],"jquery.e6729f4f.js.map","src/pages/jquery.js"],"./pages/lodash":[["lodash.0c24a439.js","src/pages/lodash.js"],"lodash.0c24a439.js.map","src/pages/lodash.js"],"./pages/antd":[["antd.41999b32.js","src/pages/antd.js"],"antd.41999b32.js.map","src/pages/antd.js"]}],"node_modules/process/browser.js":[function(require,module,exports) {
@@ -26648,7 +26640,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52131" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52450" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
