@@ -11104,10 +11104,10 @@ worker-farm@^1.5.2, worker-farm@^1.7.0:
   dependencies:
     errno "~0.1.7"
 
-wouter@1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/wouter/-/wouter-1.2.0.tgz#e14237d76b28bbf1fc60afb1808b9c8fa6fb40c4"
-  integrity sha512-QqGiP7d7BwlbLXAqZp7mAWH2EZdxnQmDtrYvA0yybd3lirLbk/vKiSv6/m3/XGuB1sy08aPZyFmGoVwxNF5LRQ==
+wouter@2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/wouter/-/wouter-2.0.0.tgz#3c13bb704a4782672e3841c5617009ad98aa42a2"
+  integrity sha512-xxdQ9JgJTmwjnk5WGk3NhpzL0y/nJtWXTOUNcjyNb1SbAvgkp7XFTcnhky+YRw41AT/kJniWfOVhcB7SiO3Y2w==
 
 wrap-ansi@^2.0.0:
   version "2.1.0"

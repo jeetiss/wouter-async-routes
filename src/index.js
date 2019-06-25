@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import ReactDOM from "react-dom";
 
 import { Router } from "wouter";
@@ -6,6 +6,8 @@ import useLocation from "wouter/use-location";
 import { LazySwitch, Route, Link } from "./lazy-wouter";
 
 import "./styles.css";
+
+const isProd = process.env.NODE_ENV === "production";
 
 const makeUseBasepathLocation = basepath => () => {
   const [location, setLocation] = useLocation();
@@ -15,10 +17,17 @@ const makeUseBasepathLocation = basepath => () => {
     ? location.slice(basepath.length)
     : location;
 
-  return [normalized, to => setLocation(basepath + to)];
+  const setter = useCallback(to => setLocation(basepath + to), [
+    basepath,
+    setLocation
+  ]);
+
+  return [normalized, setter];
 };
 
-const useBasepathLocation = makeUseBasepathLocation("/wouter-async-routes");
+const useBasepathLocation = makeUseBasepathLocation(
+  isProd ? "/wouter-async-routes" : ""
+);
 
 function App() {
   return (
