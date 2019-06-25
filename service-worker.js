@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/wouter-async-routes/precache-manifest.669274e2f60eee303a4605c45beec1c3.js"
+  "/wouter-async-routes/precache-manifest.003ff84a662f7972ab5aff2d2ae7b362.js"
 );
 
 workbox.clientsClaim();

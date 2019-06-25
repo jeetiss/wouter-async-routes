@@ -1,0 +1,2 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[5],{560:function(n,e,t){"use strict";t.r(e);var o=t(0),c=t.n(o),u=t(555);e.default=function(){return Object(o.useEffect)(function(){console.log(u)},[]),c.a.createElement("div",null,"antd loaded")}}}]);
+//# sourceMappingURL=5.0160cf48.chunk.js.map
