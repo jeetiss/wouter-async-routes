@@ -1,9 +1,9 @@
-import React, { useCallback } from 'react'
+import React, { Suspense, useCallback } from 'react'
 import ReactDOM from 'react-dom'
 
-import { Router } from 'wouter'
+import { Route, Router } from 'wouter'
 import useLocation from 'wouter/use-location'
-import { LazySwitch, Route, Link } from './lazy-wouter'
+import { LazyRoute, LinkWithPrefetch as Link } from './lazy-wouter'
 
 import './styles.css'
 
@@ -38,11 +38,17 @@ function App () {
 
         <main>
           <center>
-            <LazySwitch fallback='loading...'>
-              <Route path='/jquery' factory={() => import('./pages/jquery')} />
-              <Route path='/lodash' factory={() => import('./pages/lodash')} />
-              <Route path='/antd' factory={() => import('./pages/antd')} />
-            </LazySwitch>
+            <Suspense fallback='loading...'>
+              <LazyRoute path='/jquery' factory={() => import('./pages/jquery')} />
+              <LazyRoute path='/lodash' factory={() => import('./pages/lodash')} />
+              <LazyRoute path='/antd' factory={() => import('./pages/antd')} />
+
+              <Route path='/'>
+                <h1>Code splitting example</h1>
+
+                <p>wouter + suspense = ❤️</p>
+              </Route>
+            </Suspense>
           </center>
         </main>
       </section>
