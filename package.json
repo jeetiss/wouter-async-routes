@@ -31,7 +31,7 @@
     "dev": "parcel index.html --open",
     "build": "parcel build index.html",
     "predeploy": "parcel build index.html --public-url /wouter-async-routes",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d dist"
   },
   "browserslist": [
     ">0.2%",
