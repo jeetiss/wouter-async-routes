@@ -26172,16 +26172,21 @@ var LinkWithPrefetch = function LinkWithPrefetch(_ref3) {
   var to = _ref3.to,
       props = _objectWithoutProperties(_ref3, ["to"]);
 
+  var router = (0, _wouter.useRouter)();
   var paths = usePaths();
   var prefetch = (0, _react.useCallback)(function () {
-    if (paths.has(to)) {
-      var fetcher = paths.get(to); // hack for run lazy promise
+    var path = Array.from(paths.keys()).find(function (pattern) {
+      return router.matcher(pattern, to)[0];
+    });
+
+    if (path) {
+      var fetcher = paths.get(path); // hack for run lazy promise
 
       fetcher().then(function (v) {
         return v;
       });
     }
-  }, [paths, to]);
+  }, [paths, router, to]);
   return _react.default.createElement(_wouter.Link, _extends({
     to: to
   }, props, {
@@ -26670,7 +26675,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53386" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56028" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
