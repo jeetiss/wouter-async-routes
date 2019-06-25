@@ -7,7 +7,7 @@ import React, {
   useContext
 } from 'react'
 
-import { Link as WLink, Switch, useRoute } from 'wouter'
+import { Link as WLink, Switch, useRoute, useRouter } from 'wouter'
 
 const PathsContext = createContext(new Map())
 const usePaths = () => useContext(PathsContext)
@@ -32,24 +32,32 @@ const LazySwitch = ({ children, location }) => {
   useEffect(() => {
     let kids = children && children.length ? children : [children]
 
-    kids.forEach(kid => kid.props.factory && paths.set(kid.props.path, kid.props.factory))
+    kids.forEach(
+      kid => kid.props.factory && paths.set(kid.props.path, kid.props.factory)
+    )
 
-    return () => kids.forEach(kid => kid.props.factory && paths.delete(kid.props.path))
+    return () =>
+      kids.forEach(kid => kid.props.factory && paths.delete(kid.props.path))
   }, [children, paths])
 
   return <Switch children={children} location={location} />
 }
 
 const LinkWithPrefetch = ({ to, ...props }) => {
+  const router = useRouter()
   const paths = usePaths()
   const prefetch = useCallback(() => {
-    if (paths.has(to)) {
-      let fetcher = paths.get(to)
+    let path = Array.from(paths.keys()).find(
+      pattern => router.matcher(pattern, to)[0]
+    )
+
+    if (path) {
+      let fetcher = paths.get(path)
 
       // hack for run lazy promise
       fetcher().then(v => v)
     }
-  }, [paths, to])
+  }, [paths, router, to])
 
   return <WLink to={to} {...props} onMouseEnter={prefetch} />
 }
